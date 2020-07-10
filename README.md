@@ -26,5 +26,5 @@ sudo rfcomm bind /dev/rfcomm1 xx:xx:xx:xx:xx:xx 1
 And now you are ready to connect via serial using /dev/rfcomm1
 
 
-To drive the  windshield washer pump I'm using a 3Dprinter bed heater controller. I change the resistopr on the opto to enable 3.3V output. From 10K to 1K.
+To drive the  windshield washer pump I'm using a 3Dprinter bed heater controller. I change the resistor on the opto to enable 3.3V output. From 10K to 1K.
 
