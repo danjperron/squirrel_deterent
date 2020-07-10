@@ -54,16 +54,16 @@ class myServo: Servo
        ServoEnable=false;
      }
 
-     virtual void write(int  _timing)
+     virtual void write(int  angle)
      {
         if(!ServoEnable)
           attach(Pin);
-          if(_timing <0)
-             _timing=0;
-          if(_timing >180)
-             _timing=180;
-          Servo::write(_timing);
-          ServoEnable=true;
+        if(angle <0)
+           angle=0;
+        if(angle >180)
+           angle=180;
+        Servo::write(angle);
+        ServoEnable=true;
      }
 
      void turnOff()
@@ -74,7 +74,6 @@ class myServo: Servo
             ServoEnable=false;
          }
      }
-  
 };
 
 
