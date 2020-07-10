@@ -12,7 +12,7 @@ import struct
 
     X , Y ->  set position X or Y  in degree  (90 degree = center)
     P     ->  Start PUMP   0=off  else ON
-    D     ->  Disable servoe & pump
+    D     ->  Disable servo & pump
 
     ex:
         b'>Y5A0D\n'     Set servo Y at 90 degree 
@@ -83,11 +83,11 @@ class WaterTurret:
 
 if __name__ == '__main__':
    m1 = WaterTurret(Port="/dev/rfcomm1")
-   m1.setY(90)
+   m1.y(90)
    sleep(1)
-   m1.setY(80)
+   m1.y(80)
    sleep(1)
-   m1.setY(70)
+   m1.y(70)
    sleep(1)
    m1.off()
 
