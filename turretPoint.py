@@ -10,6 +10,35 @@ class turretPoint:
         self.minDistance = minDistance
         self.Table = []
 
+
+    # A utility function to calculate area
+    # of triangle formed by (x1, y1),
+    # (x2, y2) and (x3, y3)
+    def area(self, x1, y1, x2, y2, x3, y3):
+        return abs((x1 * (y2 - y3) + x2 * (y3 - y1)
+                   + x3 * (y1 - y2)) / 2.0)
+
+
+    # A function to check whether point P(x, y)
+    # lies inside the triangle formed by
+    # A(x1, y1), B(x2, y2) and C(x3, y3)
+    def isInsideTriangle(self,
+                          x1, y1, x2, y2, x3, y3, x, y):
+        # Calculate area of triangle ABC
+        A = self.area(x1, y1, x2, y2, x3, y3)
+        # Calculate area of triangle PBC
+        A1 = self.area(x, y, x2, y2, x3, y3)
+        # Calculate area of triangle PAC
+        A2 = self.area(x1, y1, x, y, x3, y3)
+        # Calculate area of triangle PAB
+        A3 = self.area(x1, y1, x2, y2, x, y)
+        # Check if sum of A1, A2 and A3
+        # is same as A
+        if(A == A1 + A2 + A3):
+            return True
+        else:
+            return False
+
     def Find(self, Target):
         if len(self.Table) < 3:
             return None
@@ -18,9 +47,9 @@ class turretPoint:
         # create another table with distance
         dist_table = []
         for i in self.Table:
-            p = Point(i[0], i[1])
-            dist = Target.Distance(p)
-            dist_table.append((dist, i))
+             p = Point(i[0], i[1])
+             dist = Target.Distance(p)
+             dist_table.append((dist, i))
 
         #  sort table  by distance
         for i in range(len(dist_table)):
@@ -30,50 +59,56 @@ class turretPoint:
                     dist_table[i] = dist_table[j]
                     dist_table[j] = tempo
 
-        # now using 3 point surface figure out the x and y  turret
-        # x axis first
-        avgx = 0
-        avgy = 0
-        avgc = 0
+        #  from sorted table find  nearest triangle which contains the point
+        Intersect = False
+        TPoint = [ 0, 1, 2]
 
-        for x in range(2):
-            pointx = []
-            for i in range(x, x+3):
-                pointx.append([dist_table[i][1][0],
-                               dist_table[i][1][1],
-                               dist_table[i][1][2]])
-            planex = plane3Points(pointx)
-            vx = planex.getIntersect([Target.x, Target.y, 0])
-            # print("vx {}".format(vx))
-            if vx is None:
-                continue
+        for i in range(1, len(dist_table)):
+            for j in range(i+1, len(dist_table)-1):
+                if self.isInsideTriangle(dist_table[0][1][0], dist_table[0][1][1],
+                                         dist_table[i][1][0], dist_table[i][1][1],
+                                         dist_table[j][1][0], dist_table[j][1][1],
+                                         Target.x, Target.y):
+                    #  ok we have a triangle
+                    Intersect= True
+                    TPoint[1]=i
+                    TPoint[2]=j
+                    #  print("Find ",end="")
+                    #  for i in TPoint:
+                    #    print("({},{},{}) ".format(dist_table[i][1][0],
+		    #  				 dist_table[i][1][1],
+		    #				 dist_table[i][1][2]
+		    #				),end="")
+                    #  print("")
+                    break
+            if Intersect:
+                break;
 
-            # y axis firs t
-            pointy = []
-            for i in range(3):
-                pointy.append([dist_table[i][1][0],
-                               dist_table[i][1][1],
-                               dist_table[i][1][3]])
-            planey = plane3Points(pointy)
-            vy = planey.getIntersect([Target.x, Target.y, 0])
-            # print("vy {}".format(vy))
-            if vx is None:
-                continue
+        # ok now let's get the X and Y turret value from the best triangle we found
 
-            if vx[2] >= 0:
-                if vx[2] <= 180:
-                    if vy[2] >= 0:
-                        if vy[2] <= 180:
-                            avgx = avgx+vx[2]
-                            avgy = avgy+vy[2]
-                            avgc = avgc+1
-        if avgc == 0:
+        pointx = []
+        for i in TPoint:
+            pointx.append([dist_table[i][1][0],
+                           dist_table[i][1][1],
+                           dist_table[i][1][2]])
+        planex = plane3Points(pointx)
+        vx = planex.getIntersect([Target.x, Target.y, 0])
+        # print("vx {}".format(vx))
+        if vx is None:
             return None
 
-        avgx = avgx / avgc
-        avgy = avgy / avgc
-
-        return Point(int(avgx), int(avgy))
+        # y axis firs t
+        pointy = []
+        for i in TPoint:
+            pointy.append([dist_table[i][1][0],
+                           dist_table[i][1][1],
+                           dist_table[i][1][3]])
+        planey = plane3Points(pointy)
+        vy = planey.getIntersect([Target.x, Target.y, 0])
+        # print("vy {}".format(vy))
+        if vy is None:
+            return None
+        return Point(int(vx[2]), int(vy[2]))
 
     def Add(self, ScreenP, TurretP):
         # first erase point near 10 pixels

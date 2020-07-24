@@ -64,7 +64,7 @@ class Application:
         self.root = tk.Tk()
         # set de default grey color to use in labels background
         defaultbg = self.root.cget('bg')
-        w = 1480  # width for the Tk root
+        w = 1400  # width for the Tk root
         h = 600  # height for the Tk root
         self.root .resizable(0, 0)
         ws = self.root .winfo_screenwidth()  # width of the screen
@@ -74,8 +74,8 @@ class Application:
         self.root.geometry('%dx%d+%d+%d' % (w, h, x, y))
         self.root.title(" Turret Adjustment  ")  # set window title
         self.root.protocol('WM_DELETE_WINDOW', self.destructor)
-        self.root.bind('<Up>', partial(self.MoveTurretEvent, x=0, y=-1))
-        self.root.bind('<Down>', partial(self.MoveTurretEvent, x=0, y=1))
+        self.root.bind('<Up>', partial(self.MoveTurretEvent, x=0, y=1))
+        self.root.bind('<Down>', partial(self.MoveTurretEvent, x=0, y=-1))
         self.root.bind('<Left>', partial(self.MoveTurretEvent, x=-1, y=0))
         self.root.bind('<Right>', partial(self.MoveTurretEvent, x=1, y=0))
         self.root.bind('<Return>', self.AddTurretPoint)
@@ -131,6 +131,8 @@ class Application:
         self.turretpoint.Load()
 
     def MoveTurretEvent(self, event, x, y):
+        if self.ActualTurret is None:
+           self.ActualTurret = Point(80, 80)
         self.ActualTurret.x = self.ActualTurret.x + x
         self.ActualTurret.y = self.ActualTurret.y + y
         self.MoveTurret(self.ActualTurret.x, self.ActualTurret.y)
