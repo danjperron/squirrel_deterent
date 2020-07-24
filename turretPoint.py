@@ -44,7 +44,7 @@ class turretPoint:
                                dist_table[i][1][2]])
             planex = plane3Points(pointx)
             vx = planex.getIntersect([Target.x, Target.y, 0])
-            print("vx {}".format(vx))
+            # print("vx {}".format(vx))
             if vx is None:
                 continue
 
@@ -56,7 +56,7 @@ class turretPoint:
                                dist_table[i][1][3]])
             planey = plane3Points(pointy)
             vy = planey.getIntersect([Target.x, Target.y, 0])
-            print("vy {}".format(vy))
+            # print("vy {}".format(vy))
             if vx is None:
                 continue
 

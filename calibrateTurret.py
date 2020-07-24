@@ -23,12 +23,13 @@ from Point import Point
 from turretPoint import turretPoint
 
 
-info = '''\n- Press Left Mouse key to set a new Point.\n\n
+info = '''\n- Press Left Mouse key to set a new Point.\n
+- Press Right Mouse key to toggle the Pump.\n
 - keyboard key\n
-    <left>,<right>,<up>,<down> Move turret.\n
-    <enter> Validate Point.\n
-    <del>   Clear all points.\n
-    <F1>    Reload points from files.\n
+    <left>,<right>,<up>,<down> Move turret.
+    <enter> Validate Point.
+    <del>   Clear all points.
+    <F1>    Reload points from 'turretTabe.cfg'.\n
 - All turret points are store in turretTable.cfg file.\n
 - After three points the turret will try to move itself.\n
 - Add points to increase the resolution.\n
@@ -81,6 +82,7 @@ class Application:
         self.root.bind('<Delete>', self.RemoveTurretPoints)
         self.root.bind('<F1>', self.ReloadTurretPoints)
 
+        self.Pump = False
         self.Target = None
         self.CurrentTurret = Point(90, 90)
         self.ActualTurret = None
@@ -96,6 +98,7 @@ class Application:
         self.panel.grid(row=0, rowspan=3, column=0,
                         columnspan=1, padx=0, pady=0)
         self.panel.bind('<Button-1>', self.MouseLeftPress)
+        self.panel.bind('<Button-3>', self.MouseRightPress)
 
         self.panelInfo = tk.Label(self.root, text=info, anchor="w",
                                   justify='left',
@@ -118,7 +121,7 @@ class Application:
         signal.signal(signal.SIGINT, self.signal_handler)
 
     def signal_handler(self, signal, frame):
-        print("got signal handler")
+        # print("got signal handler")
         self.root.quit()
 
     def RemoveTurretPoints(self, event):
@@ -160,6 +163,10 @@ class Application:
             img = self.DrawRectangle(img, p, (255, 0, 0))
         return img
 
+    def MouseRightPress(self, event):
+        self.Pump = not self.Pump
+        self.TurretCtrl.pump(self.Pump)
+
     def MouseLeftPress(self, event):
         self.Target = Point(event.x, event.y)
         self.MouseLabel.configure(text="Point ({:4d},{:4d})".format(
@@ -169,9 +176,9 @@ class Application:
             return
         if self.ActualTurret is None:
             self.ActualTurret = Point(90, 90)
-        print("Best Point from ({},{}) is ({},{})".format(
-                                self.Target.x, self.Target.y,
-                                BestPoint.x, BestPoint.y))
+        # print("Best Point from ({},{}) is ({},{})".format(
+        #                        self.Target.x, self.Target.y,
+        #                        BestPoint.x, BestPoint.y))
         self.ActualTurret.x = BestPoint.x
         self.ActualTurret.y = BestPoint.y
         self.MoveTurret(self.ActualTurret.x, self.ActualTurret.y)
@@ -206,11 +213,13 @@ class Application:
         self.root.after(30, self.video_loop)
 
     def destructor(self):
-        self.TurretCtrl.off()
         self.turretpoint.Save()
         self.root.destroy()
         self.vs.release()  # release web camera
         cv2.destroyAllWindows()  # it is not mandatory in this application
+        self.TurretCtrl.off()
+        self.TurretCtrl.pump(False)
+
 
 # start the app
 Calib_app = Application()
