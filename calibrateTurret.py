@@ -128,6 +128,7 @@ class Application:
         self.turretpoint.Table = []
 
     def ReloadTurretPoints(self, event):
+        self.Target=  None
         self.turretpoint.Load()
 
     def MoveTurretEvent(self, event, x, y):

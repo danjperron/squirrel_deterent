@@ -39,6 +39,28 @@ class turretPoint:
         else:
             return False
 
+
+    # combinational sort algorithm
+    # return next smallest by smallest combination first
+
+    def combin3(self,table):
+       if table is None:
+          table = [0, 1 , 2 ]
+          return table
+       table[1] = table[1] + 1
+       if table[1] >= table[2]:
+          table[0] = table[0] + 1
+          table[1] = table[0] + 1
+          if table[0] >= table[2]-1:
+            table[0]=0
+            table[1]=1
+            table[2]= table[2] + 1
+            return table
+       return table
+
+
+
+
     def Find(self, Target):
         if len(self.Table) < 3:
             return None
@@ -60,29 +82,31 @@ class turretPoint:
                     dist_table[j] = tempo
 
         #  from sorted table find  nearest triangle which contains the point
-        Intersect = False
-        TPoint = [ 0, 1, 2]
+        # I'm using  combination algorithm from small to large
+        TPoint = [0, 1 , 2]
 
-        for i in range(1, len(dist_table)):
-            for j in range(i+1, len(dist_table)-1):
-                if self.isInsideTriangle(dist_table[0][1][0], dist_table[0][1][1],
-                                         dist_table[i][1][0], dist_table[i][1][1],
-                                         dist_table[j][1][0], dist_table[j][1][1],
-                                         Target.x, Target.y):
-                    #  ok we have a triangle
-                    Intersect= True
-                    TPoint[1]=i
-                    TPoint[2]=j
-                    #  print("Find ",end="")
-                    #  for i in TPoint:
-                    #    print("({},{},{}) ".format(dist_table[i][1][0],
-		    #  				 dist_table[i][1][1],
-		    #				 dist_table[i][1][2]
-		    #				),end="")
-                    #  print("")
-                    break
-            if Intersect:
-                break;
+        while True:
+            if self.isInsideTriangle(dist_table[TPoint[0]][1][0], dist_table[TPoint[0]][1][1],
+                                     dist_table[TPoint[1]][1][0], dist_table[TPoint[1]][1][1],
+                                     dist_table[TPoint[2]][1][0], dist_table[TPoint[2]][1][1],
+                                     Target.x, Target.y):
+                #  ok we have a triangle
+                TPoint[1]=i
+                TPoint[2]=j
+                #  print("Find ",end="")
+                #  for i in TPoint:
+                #    print("({},{},{}) ".format(dist_table[i][1][0],
+        	#   				 dist_table[i][1][1],
+		#				 dist_table[i][1][2]
+		#				),end="")
+                #  print("")
+                break
+            #  using combination algorithm index
+            #  to always use the smallest distance first
+            self.combin3(TPoint)
+            if TPoint[2] >= len(dist_table):
+                TPoint = [0, 1, 2]
+                break
 
         # ok now let's get the X and Y turret value from the best triangle we found
 
