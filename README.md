@@ -25,16 +25,15 @@ After that you need to create an rfcomm device
 
 And now you are ready to connect via serial using /dev/rfcomm1
 
+Python code description
+- calibrateTurret is an application to create a grid to convert screen position to  turret x,y angle position
+- turretPoint  is the module to contains all mesh points.
+- plane3Points is the surface module to find the best fit point conversion from screen position to  turret angle
+- Point is the structure module   from (x,y) to point.x and point.x. It also get report distance between two points.
+- WaterTurret is the module to directly control the turret via /dev/rfcomm
+- turretstick is an application to control the turret via a joystick.
 
-calibrateTurret is an application to create a grid to convert screen position to  turret x,y angle positio
-turretPoint  is the module to contains all points. 
-plane3Points  is the surface module to find best fit point conversion from screen position to  xy angle
-Poiny         is the module to convert x and y point
-WaterTurret   is the module to directly control the turret via /dev/rfcomm
-
-
-
-To drive the  windshield washer pump I'm using a 3Dprinter bed heater controller. I change the resistor on the opto to enable 3.3V output. From 10K to 1K.
+To drive the  windshield washer pump I'm using a 3DPrinter bed heater controller. I change the resistor on the opto to enable 3.3V output. From 10K to 1K.
 
 
 
