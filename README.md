@@ -29,7 +29,7 @@ Python code description
 - calibrateTurret is an application to create a grid to convert screen position to  turret x,y angle position
 - turretPoint  is the module to contains all mesh points.
 - plane3Points is the surface module to find the best fit point conversion from screen position to  turret angle
-- Point is the structure module   from (x,y) to point.x and point.x. It also get report distance between two points.
+- Point is the structure module   from (x,y) to point.x and point.x. It also reports distance between two points.
 - WaterTurret is the module to directly control the turret via /dev/rfcomm
 - turretstick is an application to control the turret via a joystick.
 
