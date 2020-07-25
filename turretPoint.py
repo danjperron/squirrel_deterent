@@ -90,16 +90,6 @@ class turretPoint:
                                      dist_table[TPoint[1]][1][0], dist_table[TPoint[1]][1][1],
                                      dist_table[TPoint[2]][1][0], dist_table[TPoint[2]][1][1],
                                      Target.x, Target.y):
-                #  ok we have a triangle
-                TPoint[1]=i
-                TPoint[2]=j
-                #  print("Find ",end="")
-                #  for i in TPoint:
-                #    print("({},{},{}) ".format(dist_table[i][1][0],
-        	#   				 dist_table[i][1][1],
-		#				 dist_table[i][1][2]
-		#				),end="")
-                #  print("")
                 break
             #  using combination algorithm index
             #  to always use the smallest distance first
